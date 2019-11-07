@@ -100,8 +100,6 @@
           - Vertical sliding = <article id="webslides" class="vertical">
           - <div class="wrap"> = container 90% / <div class="wrap size-50"> = 45%;
         -->
-
-        
         <template v-for="(infoSlider, index) in $data.infoSliders" >
           <slider :slider = "infoSlider" :idx = index />
         </template>
@@ -111,38 +109,45 @@
     </main>
     <!-- end main -->
 
-   <!-- A global footer
-
      <footer role="contentinfo">
       <div class="wrap">
-        <p>An <a href="https://github.com/webslides/webslides">open source solution</a>, by <a href="https://twitter.com/webslides">@webslides</a>.</p>
+        <p><img src="static/sliders/logo marechal.jpg" alt="logo marechal" /></p> 
       </div>
-    </footer>  -->
+    </footer> 
 
     <!-- Required -->
     <script src="static/js/webslides.js"></script>
-    <script>
-      //window.ws = new WebSlides();
-    </script>
-
     <!-- OPTIONAL - svg-icons.js (fontastic.me - Font Awesome as svg icons) -->
     <script defer src="static/js/svg-icons.js"></script>
 
   </body>
   <style>
     .contraste {
-      background-color: gainsboro;
+      background-color: rgb(153, 153, 255, .8);
+      color: #000000
     }
+
+    
+	.bg-t, .bg-t:before{content: " ";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: rgba(241, 175, 100, 0.2);
+        }
+
+
   </style>
   <script>
     Vue.component('slider', {
         props: ['slider', 'idx'],
         template: `<section> 
-                    <span class="background" :style="backgroundImg()"></span>
+                    <span class="background bg-t" :style="backgroundImg()"></span>
                         <div :class="getTransition( idx + 1)">
-                          <h1><span class="contraste">&nbsp;{{slider.date}}&nbsp;</span></h1>
-                          <h2><span class="contraste">&nbsp;{{slider.title}} #{{idx + 1}}&nbsp;</span></h2>
-                          <p><span class="contraste">&nbsp;{{slider.description}}&nbsp;</span></p>
+                          <h1><span :style="buildStyle(idx)">&nbsp;{{slider.date}}&nbsp;</span></h1>
+                          <h2><span :style="buildStyle(idx)">&nbsp;{{slider.title}} #{{idx + 1}}&nbsp;</span></h2>
+                          <p><span :style="buildStyle(idx)">&nbsp;{{slider.description}}&nbsp;</span></p>
                         </div>
                   </section>`,
         methods: {
@@ -152,14 +157,26 @@
             if( imgBg.startsWith( 'http'))
               return  "background-image:url(" + imgBg + ")";
             else
-              return  "background-image:url( '" + dirStatics + imgBg + "')";
+              return  "background-image:url( '" + dirStatics + imgBg + "');background-color:rgb(153, 153, 255,.9) ";
           },
           getTransition : function( idx ){
             var transition = [ "fadeIn", "fadeInUp", "zoomIn", "slideInLeft", "slideInRight" ];
             return 'wrap ' + transition[idx % 5];// + " slow";
-
+          },
+          buildStyle : function(idx){
+             var color = this.getPalette()[idx % 6]; 
+             return "background-color: rgb(" + color[0] + "," + color[1] + "," + color[2] + ", .8 ); color:" + color[3] + ";";
+          },
+          getPalette : function(){  
+            return [
+                  [218, 247, 166, "#000000"],
+                  [255, 195, 0, "#000000"],
+                  [255, 87, 51, "#000000"],
+                  [199, 0, 57, "#FFFFFF"],
+                  [144, 12, 63, "#FFFFFF"],
+                  [88, 24, 69, "#FFFFFF"]
+              ];
           }
-
         }
      })
 
