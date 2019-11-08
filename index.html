@@ -120,7 +120,8 @@
       position: absolute;
       top: 0;
       left: 0;
-      background-color: rgba(241, 175, 100, 0.2);
+      /*background-color: rgba(241, 175, 100, 0.2);*/
+      background-color: rgba(241, 175, 100, 0.2);*/
     }
 
   .background {
@@ -137,9 +138,21 @@
   .bigYear h1 {
       font-size: 200px;
       font-weight: 900;
-      
       color: white;
+      margin-bottom: 30px;
     }
+
+  .bigYear p {
+      color: white;
+      text-align: right;
+    }
+  
+  
+  .textSlider{
+    padding: 20px;
+    width: 50%;
+
+  }
 
   </style>
   <script>
@@ -148,31 +161,32 @@
         template: `<section> 
                     <span class="background bg-t" :style="backgroundImg()"></span>
                         <div :class="getTransition( idx + 1)">
-                          <h2><span :style="buildStyle(idx)">&nbsp;{{slider.title}}    &nbsp;</span></h2>
-                          <h3><span :style="buildStyle(idx)">&nbsp;{{slider.description}}&nbsp;</span></h3>
+                          <h2 class="textSlider" :style="buildColorStyle(idx)">{{slider.title}}</h2>
+                          <h5 class="textSlider" :style="buildColorStyle(idx)" v-if="slider.description != ''">{{slider.description}} </h5>
                         </div>
                         <div class="bigYear">
                           <h1>{{slider.year}}</h1>
-                          <p>#{{idx + 1}}&nbsp;{{slider.date}}</p>
+                          <p>{{slider.date}}&nbsp;#{{idx + 1}}</p>
                         </div>
                   </section>`,
         methods: {
           
           backgroundImg : function(){
             var dirStatics = "static/sliders/img/";
+            var colorBckg = "background-color:rgb(0, 0, 0,.9)";
             var imgBg = this.slider.backgroundImg;
             if( imgBg.startsWith( 'http'))
-              return  "background-image:url(" + imgBg + ")";
+              return  "background-image:url(" + imgBg + ")" + colorBckg;
             else
-              return  "background-image:url( '" + dirStatics + imgBg + "');background-color:rgb(153, 153, 255,.9) ";
+              return  "background-image:url( '" + dirStatics + imgBg + "');" + colorBckg;
           },
           getTransition : function( idx ){
             var transition = [ "fadeIn", "fadeInUp", "zoomIn", "slideInLeft", "slideInRight" ];
             return 'wrap ' + transition[idx % 5];// + " slow";
           },
-          buildStyle : function(idx){
+          buildColorStyle : function(idx){
              var color = this.getPalette()[idx % 6]; 
-             return "background-color: rgb(" + color[0] + "," + color[1] + "," + color[2] + ", .8 ); color:" + color[3] + ";";
+             return "background-color: rgb(" + color[0] + "," + color[1] + "," + color[2] + ", .8 ); color:" + color[3] + ";" ;
           },
           getPalette : function(){  
             return [
