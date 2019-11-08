@@ -55,6 +55,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <script src="static/js/luxon.min.js"></script>
+
   </head>
   <body>
     <header role="banner">
@@ -89,7 +91,7 @@
           - Vertical sliding = <article id="webslides" class="vertical">
           - <div class="wrap"> = container 90% / <div class="wrap size-50"> = 45%;
         -->
-        <template v-for="(infoSlider, index) in $data.infoSliders" >
+        <template v-for="(infoSlider, index) in  orderByYear( $data.infoSliders)" >
           <slider :slider = "infoSlider" :idx = index />
         </template>
         
@@ -113,14 +115,31 @@
   <style>
        
 	.bg-t, .bg-t:before{content: " ";
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: rgba(241, 175, 100, 0.2);
-        }
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: rgba(241, 175, 100, 0.2);
+    }
 
+  .background {
+    background-size: contain;
+  }
+
+  .bigYear{
+    position: absolute;
+    bottom: 140px;
+    right: 10px;
+    
+  }
+
+  .bigYear h1 {
+      font-size: 200px;
+      font-weight: 900;
+      
+      color: white;
+    }
 
   </style>
   <script>
@@ -129,12 +148,16 @@
         template: `<section> 
                     <span class="background bg-t" :style="backgroundImg()"></span>
                         <div :class="getTransition( idx + 1)">
-                          <h1><span :style="buildStyle(idx)">&nbsp;{{slider.date}}&nbsp;</span></h1>
-                          <h2><span :style="buildStyle(idx)">&nbsp;{{slider.title}} #{{idx + 1}}&nbsp;</span></h2>
-                          <p><span :style="buildStyle(idx)">&nbsp;{{slider.description}}&nbsp;</span></p>
+                          <h2><span :style="buildStyle(idx)">&nbsp;{{slider.title}}    &nbsp;</span></h2>
+                          <h3><span :style="buildStyle(idx)">&nbsp;{{slider.description}}&nbsp;</span></h3>
+                        </div>
+                        <div class="bigYear">
+                          <h1>{{slider.year}}</h1>
+                          <p>#{{idx + 1}}&nbsp;{{slider.date}}</p>
                         </div>
                   </section>`,
         methods: {
+          
           backgroundImg : function(){
             var dirStatics = "static/sliders/img/";
             var imgBg = this.slider.backgroundImg;
@@ -203,10 +226,19 @@
                   });
   
             this.$nextTick(() => {
-                  window.ws = new WebSlides({ autoslide: 8000 });  
+                  window.ws = new WebSlides({ autoslide: 5000 });  
               });
             })  
+          },
+          methods: {
+            orderByYear: function(sliders) {
+            // Set slice() to avoid to generate an infinite loop!
+              return sliders.slice().sort(function(a, b) {
+                return a.year > b.year;
+              });
+            }
           }
+
       })
 
       function getValue( element, token){
@@ -236,7 +268,15 @@
           this.description =  getValue(element, 'descripcióndelevento');
           this.alcance = getValue(element, 'alcancedelevento');
           this.date = getValue(element, 'fechadelevento');
-          this.year = new Date( this.date).getFullYear();
+          
+          //Parser del año
+          console.log(this.date + " => " + luxon.DateTime.fromFormat(this.date, 'dd-MM-yyyy').year);
+          var parseYear = luxon.DateTime.fromFormat(this.date, 'dd-MM-yyyy').year;
+          if( isNaN(parseYear))
+            this.year = 1899
+          else
+            this.year = luxon.DateTime.fromFormat(this.date, 'dd-MM-yyyy').year;
+
           return this;
         }
       }
