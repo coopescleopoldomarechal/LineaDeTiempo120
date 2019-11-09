@@ -102,7 +102,8 @@
 
      <footer role="contentinfo">
       <div class="wrap">
-        <p><img src="static/sliders/logo marechal.jpg" alt="logo marechal"  onclick="window.ws.plugins.autoslide.stop();console.log('stopped');" /></p> 
+        <p><img src="static/sliders/logo marechal.jpg" alt="logo marechal"  onclick="window.ws.plugins.autoslide.stop();console.log('stopped');" />
+         <span style="font-size: x-large"> 1899 - 2019 - 120 años de Escuela Pública</span></p> 
       </div>
     </footer> 
 
@@ -136,7 +137,8 @@
   }
 
   .bigYear h1 {
-      font-size: 200px;
+      /*font-size: 200px;*/
+      font-size: 1000%;
       font-weight: 900;
       color: white;
       margin-bottom: 30px;
@@ -150,7 +152,7 @@
   
   
   .textSlider{
-    padding: 20px;
+    padding: 8px;
     width: 50%;
 
   }
@@ -187,13 +189,13 @@
           },
           buildColorStyle : function(idx){
              var color = this.getPalette()[idx % 6]; 
-             return "background-color: rgb(" + color[0] + "," + color[1] + "," + color[2] + ", .8 ); color:" + color[3] + ";" ;
+             return "background-color: rgb(" + color[0] + "," + color[1] + "," + color[2] + ", .6 ); color:" + color[3] + ";" ;
           },
           getPalette : function(){  
             return [
                   [218, 247, 166, "#000000"],
                   [255, 195, 0, "#000000"],
-                  [255, 87, 51, "#000000"],
+                  [255, 87, 51, "#FFFFFF"],
                   [199, 0, 57, "#FFFFFF"],
                   [144, 12, 63, "#FFFFFF"],
                   [88, 24, 69, "#FFFFFF"]
@@ -241,7 +243,7 @@
                   });
   
             this.$nextTick(() => {
-                  window.ws = new WebSlides({ autoslide: 5000 });  
+                  window.ws = new WebSlides({ autoslide: 3000 });  
               });
             })  
           },
